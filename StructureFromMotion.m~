@@ -1,0 +1,2 @@
+load('sfm_points.mat');% 2-by-600-by-10 matrix.
+% image_points(:,1,:) is the 1st of the 600 world points

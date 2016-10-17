@@ -39,8 +39,8 @@ imagesc(jointedImg);% Display the jointed image
 [fscene, dscene] = vl_sift(Iscene); % re-do, for another figure
 [fbook, dbook] = vl_sift(Ibook);
     
-GoodPoints1 = zeros(148,2);
-GoodPoints2 = zeros(148,2);
+GoodPoints1 = zeros(148,2);%store the good points of the image 1
+GoodPoints2 = zeros(148,2);%store the good points of the image 2
 goodPointCursor = 1;
 for i = 1: 100 %repeat N = 100 times
    perm = randperm(size(matches,2));%number of matched points
@@ -49,8 +49,8 @@ for i = 1: 100 %repeat N = 100 times
    xblist = fbook(1, matches(2,sel));
    yalist = fscene(2, matches(1,sel));
    yblist = fbook(2, matches(2,sel));
-   pointlist1 = horzcat(xalist',yalist');
-   pointlist2 = horzcat(xblist',yblist');
+   pointlist1 = horzcat(xalist',yalist'); % a 5-by-2 list of all the good points for img 1
+   pointlist2 = horzcat(xblist',yblist'); % a 5-by-2 list of all the good points for img 2
    tform = fitgeotrans(pointlist2, pointlist1, 'affine');
    transformedPointlist2 = transformPointsForward(tform, pointlist2);
    for j = 1 : 5 % compare transformedPointlist1 with pointlist2

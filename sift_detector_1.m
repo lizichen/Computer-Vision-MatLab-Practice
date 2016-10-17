@@ -6,7 +6,6 @@
 %
 % % % % % % % % % % % % % % % % % % % % % % % 
 %}
-
 colormap 'gray';
 %I = imread('book_backup.pgm');
 I = imread('scene.pgm');
