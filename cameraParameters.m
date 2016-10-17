@@ -1,3 +1,11 @@
+%{
+% % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Estimating the Camera Parameters - Lizi Chen
+%
+% % % % % % % % % % % % % % % % % % % % % % % 
+%}
+disp('Running cameraParameters.m');
 fileworld = fopen('world.txt');
 format short
 C_world = textscan(fileworld,'%f','whitespace', '');
@@ -42,10 +50,14 @@ end
 [U,S,V] = svd(AMatrix);
 oneColumnP = V(:,end);
 P = zeros(3,4);
-for i=0:2
+for i=0:2 % convert P to a 3*4 matrix
     P(i+1,:) = [oneColumnP(4*i+1,1), oneColumnP(4*i+2,1),oneColumnP(4*i+3,1),oneColumnP(4*i+4,1)];
 end   
-% now we have P, a 3*4 matrix
+% now we have P,
 [Uc,Sc,Vc] = svd(P);
-oneColumnC = Vc(:,end);
-C = oneColumnC';
+oneColumnC = Vc(:,end); 
+C = oneColumnC'; % world coordinates of the project center of the camera, C.
+% Convert C to homogenous
+CLast = C(1,4);
+C = [C(1,1)/CLast, C(1,2)/CLast, C(1,3)/CLast, 1];
+disp(C);

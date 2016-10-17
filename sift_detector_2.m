@@ -6,6 +6,7 @@
 %
 % % % % % % % % % % % % % % % % % % % % % % % 
 %}
+disp('Running sift_dector_2.m');
 colormap 'gray'; % somehow the rgb2gray(I) does not work, use this colormap to set globally.
 Iscene = imread('scene.pgm');
 Ibook = imread('book.pgm');
@@ -19,12 +20,13 @@ else
      Ibook(rows1, 1) = 0;
 end
 jointedImg = [Iscene, Ibook]; % Now append both images side-by-side.
-%figure('Position', [100 100 size(jointedImg,2) size(jointedImg,1)]);
 imagesc(jointedImg);% Display the jointed image
 [fscene, dscene] = vl_sift(Iscene);
 [fbook, dbook] = vl_sift(Ibook);
-[matches, scores] = vl_ubcmatch(dscene, dbook, 1.5); 
+[matches, scores1] = vl_ubcmatch(dscene, dbook, 1.5); 
 
+
+    % This is for displaying the match points.
     xa = fscene(1, matches(1,:));
     xb = fbook(1, matches(2,:)) + size(Iscene,2) ;
     ya = fscene(2, matches(1,:));
@@ -36,13 +38,14 @@ imagesc(jointedImg);% Display the jointed image
     fbook(1,:) = fbook(1,:) + size(Iscene,2) ;
     vl_plotframe(fbook(:,matches(2,:))) ;
 
-[fscene, dscene] = vl_sift(Iscene); % re-do, for another figure
+[fscene, dscene] = vl_sift(Iscene);
 [fbook, dbook] = vl_sift(Ibook);
-    
+[matches, scores] = vl_ubcmatch(dscene, dbook, 1.5); 
+
 GoodPoints1 = zeros(148,2);%store the good points of the image 1
 GoodPoints2 = zeros(148,2);%store the good points of the image 2
 goodPointCursor = 1;
-for i = 1: 100 %repeat N = 100 times
+for i = 1: 125 %repeat N = 100 times
    perm = randperm(size(matches,2));%number of matched points
    sel = perm(1:5) ;% randomly pick 5 points
    xalist = fscene(1, matches(1,sel));
@@ -68,66 +71,3 @@ figure;
 finalImage = imwarp(Ibook, tform2); %'OutputView', imref2d(size(Ibook)));
 colormap 'gray';
 imagesc(finalImage);
-
-%{
-    figure(2) ; clf ;
-    imagesc(cat(2, Ia, Ib)) ;
-
-    xa = fa(1,matches(1,:)) ;
-    xb = fb(1,matches(2,:)) + size(Ia,2) ;
-    ya = fa(2,matches(1,:)) ;
-    yb = fb(2,matches(2,:)) ;
-
-    hold on ;
-    h = line([xa ; xb], [ya ; yb]) ;
-    set(h,'linewidth', 1, 'color', 'b') ;
-
-    vl_plotframe(fa(:,matches(1,:))) ;
-    fb(1,:) = fb(1,:) + size(Ia,2) ;
-    vl_plotframe(fb(:,matches(2,:))) ;
-    axis image off ;
-%}
-
-%{
-cols1 = size(im1,2);
-for i = 1: size(des1, 1)
-  if (match(i) > 0)
-    line([loc1(i,2) loc2(match(i),2)+cols1], ...
-         [loc1(i,1) loc2(match(i),1)], 'Color', 'c');
-  end
-end
-hold off;
-%}
-
-%{
-[fscene, dscene] = vl_sift(Iscene);
-    permS = randperm(size(fscene,2));
-    selS = permS(1:50);
-    h_S = vl_plotframe(fscene(:,selS));
-    set(h_S,'color','r','linewidth',3) ;
-
-[fbook, dbook] = vl_sift(Ibook);
-    permB = randperm(size(fbook,2));
-    selB = permB(1:50);
-    
-    h_B = vl_plotframe(fbook(:,selB));
-    set(h_B,'color','y','linewidth',2) ;
-%}  
-
-%{
-    [F1, D1] = vl_sift(Iscene);
-    [F2, D2] = vl_sift(Ibook);
-    % Where 1.5 = ratio between euclidean distance of NN2/NN1
-    [matches, score] = vl_ubcmatch(D1,D2,1.25); 
-
-    subplot(1,2,1);
-    imshow(uint8(Iscene));
-    hold on;
-    plot(F1(1,matches(1,:)),F1(2,matches(1,:)),'b*');
-
-    subplot(1,2,2);
-    imshow(uint8(Ibook));
-    hold on;
-    plot(F2(1,matches(2,:)),F2(2,matches(2,:)),'r*');
-%}  
-

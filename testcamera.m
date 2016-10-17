@@ -1,1 +1,0 @@
-M = dlmread('world.txt')

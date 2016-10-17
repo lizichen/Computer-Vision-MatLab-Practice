@@ -6,8 +6,8 @@
 %
 % % % % % % % % % % % % % % % % % % % % % % % 
 %}
+disp('Running sift_dector_1.m');
 colormap 'gray';
-%I = imread('book_backup.pgm');
 I = imread('scene.pgm');
 I = single(I);
 image(I);

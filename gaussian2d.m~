@@ -6,7 +6,6 @@
 %
 % % % % % % % % % % % % % % % % % % % % % % % 
 %}
-disp('Running gaussian2d.m');
 colormap 'bone';
 
 % invert the colormap
@@ -18,7 +17,7 @@ colormap 'bone';
 I = imread('book.pgm');
 I = single(I);
 N = 9;
-gaussian2d2(I, N);
+gaussian2d2()
 
 % because we have sigma = 1, I ignore the multiplication of it here.
 function f=gaussian2dfunc(Img, N) % N is grid size
